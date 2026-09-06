@@ -1,95 +1,172 @@
 # Mini Hospital Emergency Management System
 
-A console-based Java application built for CIT300 (Data Structures and Algorithms)
-that simulates the management of patients arriving at a hospital emergency unit.
+A console-based Java application developed for **CIT300 – Data Structures and Algorithms**. The system simulates the management of patients in a hospital emergency unit using different data structures.
 
 ## Overview
 
-The system tracks patients from registration through emergency treatment and
-keeps a history of both completed treatments and each patient's past visits.
-It is a menu-driven console application — run it and follow the on-screen menus.
+The Mini Hospital Emergency Management System manages patients from registration through emergency treatment and maintains records of completed treatments and previous hospital visits.
+
+The application is menu-driven and runs through the Java console.
 
 ## Data Structures Used
 
-| Feature | Data Structure | Class |
-|---|---|---|
-| Patient Records (keyed by Patient ID) | Binary Search Tree | `PatientBST.java` |
-| Emergency Patient Queue (FIFO) | Queue (custom linked implementation) | `EmergencyQueue.java` |
-| Treatment History (LIFO) | Stack (custom linked implementation) | `TreatmentStack.java` |
-| Per-Patient Visit History | Singly Linked List | `VisitLinkedList.java` |
+| Feature                 | Data Structure     | Class                  |
+| ----------------------- | ------------------ | ---------------------- |
+| Patient Records         | Binary Search Tree | `PatientBST.java`      |
+| Emergency Patient Queue | Queue              | `EmergencyQueue.java`  |
+| Treatment History       | Stack              | `TreatmentStack.java`  |
+| Patient Visit History   | Singly Linked List | `VisitLinkedList.java` |
 
-Supporting data classes: `Patient.java`, `Visit.java`, `TreatmentRecord.java`.
-Entry point / console menu: `HospitalManagementSystem.java`.
+Supporting classes:
 
-## How Each Structure Is Used
+* `Patient.java`
+* `Visit.java`
+* `TreatmentRecord.java`
+* `HospitalManagementSystem.java` – Main program and menu
 
-1. **Patient Records — Binary Search Tree**
-   Patients are stored in a BST keyed by their Patient ID, which keeps
-   insertion, search, and deletion efficient (O(log n) on average) and lets
-   the system print patients in ascending ID order with a simple in-order
-   traversal.
+## How Each Data Structure Is Used
 
-2. **Emergency Patient Queue — Queue**
-   New arrivals are enqueued at the back and the next patient to be seen is
-   dequeued from the front, enforcing strict First-In-First-Out treatment
-   order.
+### 1. Patient Records – Binary Search Tree
 
-3. **Treatment History — Stack**
-   Every time a patient finishes treatment, a `TreatmentRecord` is pushed
-   onto a stack. Popping the stack retrieves the most recently completed
-   treatment first (Last-In-First-Out), which is useful for reviewing the
-   most recent activity.
+Patients are stored in a **Binary Search Tree (BST)** using the Patient ID as the key.
 
-4. **Patient Visit History — Singly Linked List**
-   Each `Patient` object owns its own `VisitLinkedList`, storing that
-   patient's past visits in the order they occurred. Visits can be added,
-   removed, searched, and displayed independently for each patient.
+The BST supports:
+
+* Inserting a new patient
+* Searching for a patient by Patient ID
+* Deleting a patient
+* Displaying patients in ascending Patient ID order using in-order traversal
+
+The BST provides **O(log n) average-case** search, insertion, and deletion when the tree is reasonably balanced.
+
+### 2. Emergency Patient Queue – Queue
+
+The emergency queue follows the **FIFO (First-In-First-Out)** principle.
+
+* New patients are added to the rear of the queue.
+* The next patient is removed from the front.
+* The first patient who enters the queue is the first patient to be treated.
+
+The queue is implemented using linked nodes instead of Java's built-in queue classes.
+
+### 3. Treatment History – Stack
+
+The treatment history follows the **LIFO (Last-In-First-Out)** principle.
+
+When a patient completes treatment, a `TreatmentRecord` is pushed onto the stack.
+
+The most recently completed treatment can then be retrieved first using the `pop()` operation.
+
+### 4. Patient Visit History – Singly Linked List
+
+Each patient has their own **Singly Linked List** for storing previous hospital visits.
+
+Each visit contains:
+
+* Visit ID
+* Date
+* Doctor
+* Diagnosis
+* Treatment
+
+The system supports adding, removing, searching, and displaying visit records.
+
+## Main Features
+
+### Patient Records
+
+* Insert new patient
+* Search patient by ID
+* Delete patient
+* Display patients in ascending ID order
+
+### Emergency Patient Queue
+
+* Enqueue patient
+* Dequeue patient
+* Display waiting patients
+* Handle an empty queue
+
+### Treatment History
+
+* Push completed treatment
+* Pop the most recent treatment
+* Display treatment records
+* Handle an empty stack
+
+### Patient Visit History
+
+* Add a visit
+* Remove a visit
+* Search for a visit
+* Display a patient's visit history
+* Handle patients with no visit history
 
 ## Project Structure
 
-```
-hospital-system/
+```text
+Mini-Hospital-Emergency-Management-System/
+│
+├── .gitignore
 ├── README.md
-└── src/
-    ├── Patient.java
-    ├── PatientBST.java
-    ├── Visit.java
-    ├── VisitLinkedList.java
-    ├── EmergencyQueue.java
-    ├── TreatmentRecord.java
-    ├── TreatmentStack.java
-    └── HospitalManagementSystem.java   (main entry point)
+├── EmergencyQueue.java
+├── HospitalManagementSystem.java
+├── Patient.java
+├── PatientBST.java
+├── TreatmentRecord.java
+├── TreatmentStack.java
+├── Visit.java
+└── VisitLinkedList.java
 ```
 
 ## How to Compile and Run
 
+Open a terminal in the project folder and run:
+
 ```bash
-cd src
 javac *.java
+```
+
+Then start the application:
+
+```bash
 java HospitalManagementSystem
 ```
 
 ## Sample Usage Flow
 
-1. Add a patient via **Patient Records → Insert New Patient**.
-2. Add the same patient to the **Emergency Patient Queue**.
-3. **Dequeue** the patient for treatment — this automatically prompts for a
-   treatment date and pushes a record onto the **Treatment History** stack.
-4. Add a visit entry to that patient under **Patient Visit History**.
-5. Explore search, delete, pop, and display operations from each menu.
+1. Select **Patient Records** from the main menu.
+2. Insert a new patient.
+3. Search or display patient records.
+4. Add the patient to the **Emergency Patient Queue**.
+5. Dequeue the patient when treatment is provided.
+6. Add the completed treatment to the **Treatment History**.
+7. Add previous or new visit details under **Patient Visit History**.
+8. Search, remove, or display visit records when required.
 
-## Notes on Design Decisions
+## Design Decisions
 
-- The Queue and Stack are implemented from scratch using linked nodes
-  (rather than `java.util.Queue`/`java.util.Stack`) to directly demonstrate
-  the underlying data structure mechanics, as required by the assignment.
-- The BST does not allow duplicate Patient IDs; `insert()` returns `false`
-  if the ID already exists.
-- Deletion from the BST handles all three cases (no children, one child,
-  two children) using the in-order successor approach.
-- Each `Patient` instance owns its own `VisitLinkedList`, so visit history
-  is naturally scoped per patient rather than kept in one global list.
+* The Queue and Stack are implemented from scratch using linked nodes instead of Java's built-in collection classes.
+* The BST uses Patient ID as the key and does not allow duplicate Patient IDs.
+* BST deletion handles nodes with no children, one child, and two children.
+* The in-order traversal of the BST displays patients in ascending Patient ID order.
+* Each patient owns a separate `VisitLinkedList`, keeping visit history specific to that patient.
+* Empty Queue, Stack, and Visit History cases are handled with appropriate messages.
+
+## Technologies Used
+
+* **Java**
+* **Object-Oriented Programming**
+* **Binary Search Tree**
+* **Queue**
+* **Stack**
+* **Singly Linked List**
+* **Git & GitHub**
 
 ## Author
 
-Individual assignment submission for CIT300 - Data Structures and Algorithms.
+**M. Afrose Hasna**
+**23DA2-0610**
+
+Individual Assignment – CIT300
+**Data Structures and Algorithms**
